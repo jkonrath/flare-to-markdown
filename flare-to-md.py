@@ -12,7 +12,7 @@ from distutils.dir_util import copy_tree
 
 def main():
     """
-    Converts a Flare clean XHTML output to markdown, suitable for Jekyll.
+    Converts Madcap Flare clean XHTML output to Markdown, suitable for Jekyll.
     
     Jon Konrath (jkonrath@rumored.com)
 
@@ -21,7 +21,11 @@ def main():
     If you're not sure you have these installed:
         python -m pip list
 
-    This assumes you're in a docs-src directory that has a very specific topic.yml file for TOC that you probably don't have.
+    Warning: this is an incredibly bespoke application and I'm not a good Python developer. I doubt
+    this would work out of the box for you, but maybe it's a proof of concept of what you could do.
+
+    This assumes you're in a docs-src directory that has a very specific topic.yml file for TOC that 
+    was used for a home-grown Jekyll TOC that you probably don't have.
     This goes through the src/_data/topic.yml and finds any items with flare: true flag set.
     """
     print("Running flare-to-md with Python "+sys.version)
@@ -41,8 +45,8 @@ def convertbook(bookname):
     print("    converting "+bookname)
 
     # Recursively copy everything in src/_topic dir to src/topic.
-#TODO: (check if src/_topic really contains raw xhtml output and isn't a dir in a dir, etc)
-#TODO: at bare minimum, it needs an index.html in the root
+    #TODO: (check if src/_topic really contains raw xhtml output and isn't a dir in a dir, etc)
+    #TODO: at bare minimum, it needs an index.html in the root
 
     #old way:
     #if the destination dir already exists, delete it
@@ -76,13 +80,13 @@ def convertbook(bookname):
                 root = ET.parse(htmlfname).getroot()
 
                 # Getting Stuff For The YAML
-# TODO: only title is really required. The others I think may be in the head, so look there and skip if missing
+# TODO: only title is really required. The others may be in the head, so look there and skip if missing
                 # - get <title>, clean it up, and make it the pageTitle
                 pageTitle = cleanelement(root.find('head/title'))
                 # - get the first p contents, clean it up, and make it the description.
                 description = cleanelement(root.find('body/p'))
                 #TODO: both of these could fail because of missing elements
-                #TODO: no navtitle - bw doesn't do anything, though. I hope we don't get any crazy TOC titles out of this
+                #TODO: no navtitle - I hope we don't get any crazy TOC titles out of this
                 #TODO: someday figure out keywords
 
                 # extract everything within <body> (excluding the <body></body> tags)
